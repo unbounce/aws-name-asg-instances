@@ -1,0 +1,18 @@
+---
+#
+# These are settings that apply to the project in general,
+# across all environments.
+#
+
+# The name of the project
+project_name: 'asg-name-instances'
+
+# The label for the environment for the stack launched into AWS.
+# Is it development, staging, or production, or some other moniker?
+env_label: "{{ stack_label|default('dev') }}"
+
+# How long will this stack be active in the AWS environment.
+# The lifetime determines whether this is something that will
+# recreate itself or needs further productionizing.
+stack_lifetime: 'long'    # vs short
+

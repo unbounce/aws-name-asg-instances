@@ -1,0 +1,9 @@
+---
+- hosts: all
+  gather_facts: no
+  connection: local
+  tasks:
+    - include: _manage-stack.yml
+      vars:
+        stack_state: absent
+
