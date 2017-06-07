@@ -1,0 +1,29 @@
+{
+  "version": "0",
+  "id": "8f7c219a-53b3-475c-bb86-8d67f1c2adfc",
+  "detail-type": "EC2 Instance Launch Successful",
+  "source": "aws.autoscaling",
+  "account": "012345679",
+  "time": "2017-06-07T16:35:25Z",
+  "region": "sa-east-1",
+  "resources": [
+    "arn:aws:autoscaling:sa-east-1:0123456789:autoScalingGroup:495f1063-cc32-409d-ba69-b7ab09d81839:autoScalingGroupName/test-asg",
+    "arn:aws:ec2:sa-east-1:0123456789:instance/i-0123456789abcdef0"
+  ],
+  "detail": {
+    "Description": "Launching a new EC2 instance: i-0123456789abcdef0",
+    "Details": {
+      "Subnet ID": "subnet-abcdef01",
+      "Availability Zone": "sa-east-1a"
+    },
+    "EndTime": "2017-06-07T16:35:25.454Z",
+    "RequestId": "3c892d02-b4f7-42aa-864f-a735ae1a5507",
+    "ActivityId": "3c892d02-b4f7-42aa-864f-a735ae1a5507",
+    "Cause": "At 2017-06-07T16:34:46Z a user request created an AutoScalingGroup changing the desired capacity from 0 to 1.  At 2017-06-07T16:34:50Z an instance was started in response to a difference between desired and actual capacity, increasing the capacity from 0 to 1.",
+    "AutoScalingGroupName": "test-asg",
+    "StartTime": "2017-06-07T16:34:52.904Z",
+    "EC2InstanceId": "i-0123456789abcdef0",
+    "StatusCode": "InProgress",
+    "StatusMessage": ""
+  }
+}
