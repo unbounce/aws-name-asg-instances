@@ -1,0 +1,5 @@
+---
+- name: load project settings
+  include_vars:
+    dir: "{{ playbook_dir }}/vars"
+    name: "config"

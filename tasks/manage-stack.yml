@@ -1,9 +1,4 @@
 ---
-- name: load project settings
-  include_vars:
-    dir: "vars"
-    name: "config"
-
 - name: manage stack (create, update or delete)
   cloudformation:
     stack_name: "{{ config.project_name }}-{{ config.env_label }}"
