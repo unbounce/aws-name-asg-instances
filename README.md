@@ -22,6 +22,13 @@ them based on their tags.  Thus, only the Lambda function that backs the
 CloudWatch Event rule has the abiility to name EC2 instances, and only in
 a specific format.
 
+## Costs
+
+The resources created under this CloudFormation template will cost either
+very little or nothing.  The only element that costs anything is the
+Lambda function, and Amazon has a generous free tier that should cover
+just about everyone's use case for this tool, making it free to run.
+
 ## Naming Format
 
 The instances are named based on the following convention:
