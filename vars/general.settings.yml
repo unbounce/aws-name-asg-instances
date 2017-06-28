@@ -9,7 +9,7 @@ project_name: 'asg-name-instances'
 
 # The label for the environment for the stack launched into AWS.
 # Is it development, staging, or production, or some other moniker?
-env_label: "{{ stack_label|default('dev') }}"
+env_label: "{{ stack_env|default('dev') }}"
 
 # How long will this stack be active in the AWS environment.
 # The lifetime determines whether this is something that will
