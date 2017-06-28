@@ -7,7 +7,7 @@
     template: "{{ playbook_dir }}/cfn-template.yml"
     tags:
       project: "{{ config.project_name }}"
-      environment: "{{ stack_env }}"
+      environment: "{{ config.env_label }}"
       lifetime: "{{ config.stack_lifetime }}"
   with_items: "{{ config.stack_regions }}"
 
