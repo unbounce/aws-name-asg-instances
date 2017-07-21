@@ -1,5 +1,5 @@
 ---
-- name: manage stack (create, update or delete)
+- name: "ensure stack is {{ stack_state }}"
   cloudformation:
     stack_name: "{{ config.project_name }}-{{ config.env_label }}"
     region: "{{ item }}"
