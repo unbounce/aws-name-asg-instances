@@ -15,10 +15,11 @@ import (
 
 const (
   MAX_TAG_LENGTH int = 255
+  TAG_PROJECT string = "project"
+  TAG_ENV string = "environment"
 )
 
 var (
-  LambdaError = errors.New("Lambda error")
   NameAlreadySetError = errors.New("Name already set")
   TagNotFoundError = errors.New("Tag not found")
   InstanceNotFoundError = errors.New("Instance not found")
@@ -45,16 +46,19 @@ func Handler(ctx context.Context, event events.CloudWatchEvent) {
   tagList := getTags(cfg, data.EC2InstanceId)
 
   if nameTagSet(tagList) {
-    panic("Name tag already set")
+    fmt.Printf("Name tag already set on instance: %s\n", data.EC2InstanceId)
+    return
   }
 
-  projectTag, err := getTagValue(tagList, "project")
+  projectTag, err := getTagValue(tagList, TAG_PROJECT)
   if err != nil {
-    panic(err.Error())
+    fmt.Printf("Missing required tag: %s\n", TAG_PROJECT)
+    return
   }
-  envTag, err := getTagValue(tagList, "environment")
+  envTag, err := getTagValue(tagList, TAG_ENV)
   if err != nil {
-    panic(err.Error())
+    fmt.Printf("Missing required tag: %s\n", TAG_ENV)
+    return
   }
 
   name := buildName(projectTag, envTag, data.EC2InstanceId)
