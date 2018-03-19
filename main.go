@@ -34,12 +34,12 @@ func Handler(ctx context.Context, event events.CloudWatchEvent) {
 	var data AutoScalingEvent
 	err := json.Unmarshal(event.Detail, &data)
 	if err != nil {
-		panic(err.Error())    // AWS changed their payload.  Fail fast.
+		panic(err.Error()) // AWS changed their payload.  Fail fast.
 	}
 
 	cfg, err := external.LoadDefaultAWSConfig()
 	if err != nil {
-		panic(err.Error())    // Lambda or IAM is failing.  Fail fast.
+		panic(err.Error()) // Lambda or IAM is failing.  Fail fast.
 	}
 
 	verifyInstanceExists(cfg, data.EC2InstanceId)
