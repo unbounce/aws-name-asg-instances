@@ -10,7 +10,7 @@ func TestNameTagSet(t *testing.T) {
 		Name     string
 		keyName  string
 		keyVal   string
-		expected bool
+		errorExpected bool
 	}{
 		{"case1", "NotName", "foo", false},
 		{"case2", "Name", "foo", true},
@@ -25,9 +25,9 @@ func TestNameTagSet(t *testing.T) {
 			},
 		}
 
-		actual := nameTagSet(tagList)
-		if actual != tc.expected {
-			t.Errorf("[%s] Expected %v but got %v", tc.Name, tc.expected, actual)
+		err := nameTagSet(tagList)
+		if err != nil && !tc.errorExpected {
+			t.Errorf("[%s] Expected no error", tc.Name)
 		}
 	}
 }
