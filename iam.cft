@@ -29,7 +29,7 @@ Resources:
               - "ec2:DescribeInstanceStatus"
             Resource: "*"
       Roles:
-        - !Ref IAMRole
+        - !Ref IamRole
 
   AllowLambdaCloudwatchLogs:
     Type: "AWS::IAM::Policy"
@@ -46,7 +46,7 @@ Resources:
             Resource:
               - !Sub "arn:aws:logs:*:${AWS::AccountId}:*"
       Roles:
-        - !Ref IAMRole
+        - !Ref IamRole
 
 Outputs:
   IamRoleArn:
