@@ -1,0 +1,57 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Provision IAM resources for the ASG Name Instances tool"
+
+Resources:
+  IamRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: "lambda.amazonaws.com"
+            Action: "sts:AssumeRole"
+      Path: "/lambda/"
+
+  AllowEC2NamingPolicy:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "rw-add-ec2-tags"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "ec2:CreateTags"
+              - "ec2:DescribeTags"
+              - "ec2:DescribeInstanceStatus"
+            Resource: "*"
+      Roles:
+        - !Ref IAMRole
+
+  AllowLambdaCloudwatchLogs:
+    Type: "AWS::IAM::Policy"
+    Properties:
+      PolicyName: "rw-cloudwatch-logs"
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action:
+              - "logs:CreateLogStream"
+              - "logs:CreateLogGroup"
+              - "logs:PutLogEvents"
+            Resource:
+              - !Sub "arn:aws:logs:*:${AWS::AccountId}:*"
+      Roles:
+        - !Ref IAMRole
+
+Outputs:
+  IamRoleArn:
+    Value: !GetAtt IamRole.Arn
+    Description: "ARN of the IAM role assumed by Lambda"
+    Export:
+      Name: "aws-name-asg-instances:iam:role:arn"
+
