@@ -79,6 +79,42 @@ Run `make help` to see how to deploy the project in each phase.
 
 **Important**: Each phase of the stack requires both an AWS region and an AWS profile to be specified.  The given profile can be different IAM roles depending on your organization's structure (for instance, if administrators are only allowed to launch IAM resources).
 
+## Changes between v1.x and v2.x
+
+This project changed drastically between v1.x and v2.x in the following ways:
+
+* The orchestration by Ansible was removed and replaced with a Makefile.
+
+  Ansible is heavyweight for the type of orchestration required by this
+  project.  The project's CloudFormation infrastructure was retooled so
+  that it is longer-lived and less changes are required.  For instance,
+  the Lambda code is the only phase that changes often, so optimization
+  was focused there instead of updating the CFN stack constantly.  As
+  the infrastructure didn't change often, the Ansible orchestration no
+  longer seemed necessary and could be replaced with a simple Makefile.
+
+* The Lambda function code was converted from Python to Go.
+
+  The Go code is faster to run, saving time and money, and enforces
+  type checking, something which Python consistently did not meet. The
+  Go code abstracts the JSON payloads by converting them to structures,
+  which Python cannot handle and consistently requires dictionary key
+  checks, obfuscating the code.  Lastly, tests could be easily added
+  the handle the business logic (versus the type checking) required by
+  the project.
+
+* The stacks were split between global IAM and regional Event stacks.
+
+  In v1.x, the project created a separate IAM role in each region where
+  the event resources were created.  This created too many IAM resources
+  can AWS limits could be hit, which impacts other teams.  It also looks
+  messy and isn't needed if there is some prior dependency checking. The
+  IAM stack is now deployed to a single region, since it is global, and
+  then the ARN of the role is passed to each event stack, which is
+  regionally deployed, to complete the process.  This also means
+  different teams (administrators, developers) can deploy the different
+  parts of the project, enforcing any organization security constraints.
+
 ## License
 
 tl;dr MIT license.
