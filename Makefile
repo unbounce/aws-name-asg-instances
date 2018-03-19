@@ -4,7 +4,7 @@
 project.repo := github.com/unbounce/aws-name-asg-instances
 
 build:
-	go build -o .build/main $(project.repo)
+	GOOS=linux GOARCH=amd64 go build -o .build/main $(project.repo)
 
 test:
 	go test $(project.repo)
