@@ -1,5 +1,5 @@
-.DEFAULT_GOAL := build
-.PHONY: build test
+.DEFAULT_GOAL := help
+.PHONY: build test help deploy-iam-stack deploy-event-stack require-profile require-region check-iam-stack check-event-stack prepare-event-stack deploy-code
 
 pwd := $(shell pwd)
 
@@ -23,10 +23,13 @@ build.dir := $(pwd)/.build
 build.filename = main
 build.file := $(build.dir)/$(build.filename)
 
-build:
+help: ## Shows this message
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+build: ## Compiles the application for the Linux target (AWS Lambda)
 	GOOS=linux GOARCH=amd64 go build -o $(build.file) $(project.repo)
 
-test:
+test: ## Runs local tests
 	go test $(project.repo)
 
 require-region:
