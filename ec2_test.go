@@ -7,9 +7,9 @@ import (
 
 func TestNameTagSet(t *testing.T) {
 	cases := []struct {
-		Name     string
-		keyName  string
-		keyVal   string
+		Name          string
+		keyName       string
+		keyVal        string
 		errorExpected bool
 	}{
 		{"case1", "NotName", "foo", false},

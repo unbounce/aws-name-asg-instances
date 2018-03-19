@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	MAX_TAG_LENGTH int    = 255
+	MAX_TAG_LENGTH int = 255
 )
 
 var (
@@ -70,7 +70,7 @@ func getTags(cfg aws.Config, instanceId string) []ec2.TagDescription {
 func nameTagSet(tagList []ec2.TagDescription) error {
 	for _, i := range tagList {
 		if *i.Key == "Name" && *i.Value != "" {
-      return NameAlreadySetError
+			return NameAlreadySetError
 		}
 	}
 

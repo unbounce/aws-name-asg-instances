@@ -10,8 +10,8 @@ import (
 )
 
 const (
-	TAG_PROJECT    string = "project"
-	TAG_ENV        string = "environment"
+	TAG_PROJECT string = "project"
+	TAG_ENV     string = "environment"
 )
 
 type AutoScalingEvent struct {
@@ -24,7 +24,7 @@ func processPayload(event events.CloudWatchEvent) AutoScalingEvent {
 	if err != nil {
 		panic(err.Error()) // AWS changed their payload.  Fail fast.
 	}
-  return data
+	return data
 }
 
 func Handler(ctx context.Context, event events.CloudWatchEvent) {
@@ -33,20 +33,20 @@ func Handler(ctx context.Context, event events.CloudWatchEvent) {
 		panic(err.Error()) // Lambda or IAM is failing.  Fail fast.
 	}
 
-  data := processPayload(event)
+	data := processPayload(event)
 
-  if err := verifyInstanceExists(cfg, data.EC2InstanceId); err != nil {
-    switch err {
-      case InstanceNotFoundError:
-        fmt.Printf("Instance not found: %s\n", data.EC2InstanceId)
-        return
-      case MultipleInstancesError:
-        fmt.Printf("1+ instances found for instance %s.  Aborting to prevent damage.\n", data.EC2InstanceId)
-        return
-      default:
-        panic(err.Error())
-    }
-  }
+	if err := verifyInstanceExists(cfg, data.EC2InstanceId); err != nil {
+		switch err {
+		case InstanceNotFoundError:
+			fmt.Printf("Instance not found: %s\n", data.EC2InstanceId)
+			return
+		case MultipleInstancesError:
+			fmt.Printf("1+ instances found for instance %s.  Aborting to prevent damage.\n", data.EC2InstanceId)
+			return
+		default:
+			panic(err.Error())
+		}
+	}
 
 	tagList := getTags(cfg, data.EC2InstanceId)
 
@@ -74,4 +74,3 @@ func Handler(ctx context.Context, event events.CloudWatchEvent) {
 func main() {
 	lambda.Start(Handler)
 }
-
