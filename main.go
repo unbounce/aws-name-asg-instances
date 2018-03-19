@@ -21,6 +21,8 @@ var (
   LambdaError = errors.New("Lambda error")
   NameAlreadySetError = errors.New("Name already set")
   TagNotFoundError = errors.New("Tag not found")
+  InstanceNotFoundError = errors.New("Instance not found")
+  MultipleInstancesError = errors.New("Multiple instances found")
 )
 
 type AutoScalingEvent struct {
@@ -80,12 +82,12 @@ func verifyInstanceExists(cfg aws.Config, instanceId string) error {
 
   if len(result.InstanceStatuses) < 1 {
     fmt.Printf("Instance not found: %s\n", instanceId)
-    return LambdaError
+    return InstanceNotFoundError
   }
 
   if len(result.InstanceStatuses) > 1 {
     fmt.Printf("1+ instances found for instance %s.  Aborting to prevent damage.\n", instanceId)
-    return LambdaError
+    return MultipleInstancesError
   }
 
   return nil
