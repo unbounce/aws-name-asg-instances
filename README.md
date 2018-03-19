@@ -56,7 +56,6 @@ donny-staging-029d0202d1a
 
 ## Project Requirements
 
-* Ansible (optional, but useful)
 * Amazon Web Services account
 * Permissions to create AWS resources:
 
@@ -70,9 +69,15 @@ may not be available in every region, so the following Ansible playbook
 ensures that the stack is launched only in the regions where all AWS
 services are supported.
 
-```
-$ ansible-playbook -i localhost.inventory -e 'stack_env=production' create-stack.yml
-```
+The project is launch in 4 phases:
+1. Deploy the IAM stack (this happens only once -- globally)
+1. Deploy the Event stack (this happens only once -- per region)
+1. Prepare the Event stack for Go code (this happens only once -- per region)
+1. Deploy the Go code (this happens at least once -- per region)
+
+Run `make help` to see how to deploy the project in each phase.
+
+**Important**: Each phase of the stack requires both an AWS region and an AWS profile to be specified.  The given profile can be different IAM roles depending on your organization's structure (for instance, if administrators are only allowed to launch IAM resources).
 
 ## License
 
