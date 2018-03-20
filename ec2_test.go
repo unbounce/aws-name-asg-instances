@@ -6,7 +6,7 @@ import (
 )
 
 func TestNameTagSet(t *testing.T) {
-  t.Parallel()
+	t.Parallel()
 	cases := []struct {
 		Name          string
 		keyName       string
@@ -34,7 +34,7 @@ func TestNameTagSet(t *testing.T) {
 }
 
 func TestGetTagValue(t *testing.T) {
-  t.Parallel()
+	t.Parallel()
 	cases := []struct {
 		Name          string
 		keyName       string
@@ -68,7 +68,7 @@ func TestGetTagValue(t *testing.T) {
 }
 
 func TestBuildName(t *testing.T) {
-  t.Parallel()
+	t.Parallel()
 	cases := []struct {
 		Name       string
 		project    string
