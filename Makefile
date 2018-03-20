@@ -49,14 +49,22 @@ deploy-event-stack: require-region require-profile ## Deploys the Event stack to
 	aws cloudformation create-stack --stack-name $(project.name)-event --profile $(AWS_PROFILE) --template-body file://$(event.template.file) --parameters ParameterKey=IamRoleArn,ParameterValue=$(shell aws cloudformation list-exports --region $(iam.region) --query 'Exports[?Name == `$(iam.export.name)`].Value' --profile $(AWS_PROFILE) --output text) --region $(AWS_REGION) --tags $(cfn.tags) --enable-termination-protection
 
 prepare-event-stack: require-region require-profile ## Prepares the Event stack for Go code
-	aws lambda update-function-configuration --function-name $(shell aws cloudformation list-exports --region $(iam.region) --query 'Exports[?Name == `$(lambda.export.name)`].Value' --profile $(AWS_PROFILE) --output text) --region $(AWS_REGION) --handler main --runtime go1.x --profile $(AWS_PROFILE)
+	aws lambda update-function-configuration --function-name $(shell aws cloudformation list-exports --region $(AWS_REGION) --query 'Exports[?Name == `$(lambda.export.name)`].Value' --profile $(AWS_PROFILE) --output text) --region $(AWS_REGION) --handler main --runtime go1.x --profile $(AWS_PROFILE)
 
 deploy-code: require-region require-profile ## Deploys the Go code to Lambda
-	aws lambda update-function-code --function-name $(shell aws cloudformation list-exports --region $(iam.region) --query 'Exports[?Name == `$(lambda.export.name)`].Value' --profile $(AWS_PROFILE) --output text) --region $(AWS_REGION) --profile $(AWS_PROFILE) --zip-file fileb://$(dist.file)
+	aws lambda update-function-code --function-name $(shell aws cloudformation list-exports --region $(AWS_REGION) --query 'Exports[?Name == `$(lambda.export.name)`].Value' --profile $(AWS_PROFILE) --output text) --region $(AWS_REGION) --profile $(AWS_PROFILE) --zip-file fileb://$(dist.file)
 
 check-iam-stack: require-profile ## Views the IAM stack status in CFN
 	aws cloudformation describe-stack-events --stack-name $(project.name)-iam --region $(iam.region) --profile $(AWS_PROFILE) --query 'StackEvents[0]'
 
 check-event-stack: require-region require-profile ## Views the Event stack status in CFN
 	aws cloudformation describe-stack-events --stack-name $(project.name)-event --region $(AWS_REGION) --profile $(AWS_PROFILE) --query 'StackEvents[0]'
+
+dist: ## Creates a distributable linux artifact suitable for Lambda
+	mkdir -p $(dist.dir)
+	cd $(build.dir) && zip $(dist.file) $(build.filename)
+
+clean: ## Remove any temporary project directories
+	rm -rf $(dist.dir)
+	rm -rf $(build.dir)
 
