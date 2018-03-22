@@ -1,0 +1,54 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Adds Name tags to EC2 instances in an ASG"
+
+Parameters:
+  IamRoleArn:
+    Type: String
+    Description: "ARN of the IAM for Lambda to use"
+
+Resources:
+  CloudWatchEventRule:
+    Type: "AWS::Events::Rule"
+    Properties:
+      Description: "Names EC2 instances in an ASG based on tags"
+      State: ENABLED
+      Targets:
+        - Id: lambda-name-instance
+          Arn: !GetAtt LambdaFunction.Arn
+      EventPattern:
+        source:
+          - "aws.autoscaling"
+        detail-type:
+          - "EC2 Instance Launch Successful"
+
+  LambdaPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      Action: "lambda:InvokeFunction"
+      FunctionName: !GetAtt LambdaFunction.Arn
+      Principal: "events.amazonaws.com"
+      SourceArn: !GetAtt CloudWatchEventRule.Arn
+
+  LambdaFunction:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Code:
+        ZipFile: !Sub |
+          def lambda_handler(event, context):
+            print("Initial Lambda Python stub.")
+            print("Replace with real deployment package.")
+      Description: "Names EC2 instances in an ASG based on its tags"
+      Handler: "index.lambda_handler"
+      Role: !Ref IamRoleArn
+      MemorySize: 128   # MB
+      Runtime: "python3.6"
+      Timeout: 60   # seconds
+
+Outputs:
+  LambdaFunctionArn:
+    Value: !GetAtt LambdaFunction.Arn
+    Description: "ARN of the Lambda function that names EC2 instances"
+    Export:
+      Name: "aws-name-asg-instances:lambda:function:arn"
+
