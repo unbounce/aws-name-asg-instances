@@ -71,7 +71,7 @@ ensures that the stack is launched only in the regions where all AWS
 services are supported.
 
 ```
-$ ansible-playbook -i localhost.inventory -e 'stack_env=production' create-stack.yml
+ansible-playbook -i localhost.inventory -e 'stack_env=production' create-stack.yml
 ```
 
 ## License
